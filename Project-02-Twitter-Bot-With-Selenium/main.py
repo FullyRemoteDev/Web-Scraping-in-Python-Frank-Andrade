@@ -15,7 +15,6 @@ time.sleep(6)
 
 username = driver.find_element_by_xpath('//input[@autocomplete="username"]')
 twitter_username = os.environ.get("TWITTER_USERNAME")
-print(twitter_username)
 username.send_keys(twitter_username)
 
 next_button = driver.find_element_by_xpath('//div[@role="button"]//span[text()="Next"]')
