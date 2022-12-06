@@ -36,4 +36,4 @@ for tweet in tweets:
 driver.quit()
 
 df_tweets = pd.DataFrame({'User': user_data, 'Tweet': text_data})
-df_tweets.to_csv('tweets.csv', index=False)
+df_tweets.to_csv('tweets-search.csv', index=False)
