@@ -64,7 +64,8 @@ ROBOTSTXT_OBEY = True
 # See https://docs.scrapy.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    # 'movie_transcripts.pipelines.MovieTranscriptsPipeline': 300,
-   'movie_transcripts.pipelines.MongodbPipeline': 300,
+   # 'movie_transcripts.pipelines.MongodbPipeline': 300,
+   'movie_transcripts.pipelines.SQLitePipeline': 300,
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)

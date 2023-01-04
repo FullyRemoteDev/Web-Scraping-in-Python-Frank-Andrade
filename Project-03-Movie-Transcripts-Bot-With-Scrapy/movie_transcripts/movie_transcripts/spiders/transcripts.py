@@ -27,12 +27,26 @@ class TranscriptsSpider(CrawlSpider):
         request.headers['User-Agent'] = self.user_agent
         return request
 
+    # For MongoDB no need to join transcripts as it can be stored as an array
+    # def parse_item(self, response):
+    #     article = response.xpath('//article[@class="main-article"]')
+    #
+    #     yield {
+    #         'Title': article.xpath('./h1/text()').get(),
+    #         'Plot': article.xpath('./p/text()').get(),
+    #         'Transcript': article.xpath('./div[@class="full-script"]/text()').getall(),
+    #         'URL': response.url,
+    #     }
+
+    # For SQLite the transcripts have to be joined to store as Text as SQlite does not store arrays
     def parse_item(self, response):
         article = response.xpath('//article[@class="main-article"]')
+        transcript_list = article.xpath('./div[@class="full-script"]/text()').getall()
+        transcript_string = ' '.join(transcript_list)
 
         yield {
             'Title': article.xpath('./h1/text()').get(),
             'Plot': article.xpath('./p/text()').get(),
-            'Transcript': article.xpath('./div[@class="full-script"]/text()').getall(),
+            'Transcript': transcript_string,
             'URL': response.url,
         }

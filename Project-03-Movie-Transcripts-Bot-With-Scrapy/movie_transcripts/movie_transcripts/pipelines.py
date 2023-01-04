@@ -9,6 +9,7 @@ from itemadapter import ItemAdapter
 
 import logging
 import pymongo
+import sqlite3
 from dotenv import load_dotenv
 import os
 
@@ -28,4 +29,41 @@ class MongodbPipeline:
 
     def process_item(self, item, spider):
         self.db[self.collection_name].insert_one(item)
+        return item
+
+
+class SQLitePipeline:
+    collection_name = 'Transcripts'
+
+    def open_spider(self, spider):
+        self.connection = sqlite3.connect('Transcripts_DB')
+        self.c = self.connection.cursor()
+
+        try:
+            self.c.execute('''
+                CREATE TABLE Transcripts (
+                    Title TEXT,
+                    Plot TEXT,
+                    Transcript TEXT,
+                    URL TEXT
+                )
+            ''')
+        except sqlite3.OperationalError:
+            pass
+
+        self.connection.commit()
+
+    def close_spider(self, spider):
+        self.client.close()
+
+    def process_item(self, item, spider):
+        self.c.execute('''
+            INSERT INTO Transcripts (Title, Plot, Transcript, URL) VALUES (?, ?, ?, ?)
+        ''', (
+            item.get('Title'),
+            item.get('Plot'),
+            item.get('Transcript'),
+            item.get('URL'),
+        ))
+        self.connection.commit()
         return item
